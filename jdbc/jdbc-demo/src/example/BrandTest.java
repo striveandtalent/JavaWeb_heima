@@ -3,6 +3,7 @@ package example;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import org.junit.jupiter.api.Test;
 import pojo.Brand;
+
 import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -125,6 +126,28 @@ public class BrandTest {
         int count = pstmt.executeUpdate();
         System.out.println(count > 0);
 
+        pstmt.close();
+        conn.close();
+    }
+
+    @Test
+    public void testDeleteById() throws Exception {
+        //模拟用户提交的参数
+        int id = 4;
+
+        Properties prop = new Properties();
+        prop.load(new FileInputStream("src/druid.properties"));
+        DataSource dataSource = DruidDataSourceFactory.createDataSource(prop);
+        Connection conn = dataSource.getConnection();
+        String sql = "delete from tb_user where id=?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, id);
+        //执行sql
+        int count = pstmt.executeUpdate();
+        System.out.println(count > 0);
+
+        pstmt.close();
+        conn.close();
     }
 
 }
